@@ -29,7 +29,8 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	g := Event{
-		Date: time.Now(),
+		Email: u.Email,
+		Date:  time.Now(),
 	}
 	fmt.Fprint(w, "Hello, world!\n")
 	var jj, _ = json.Marshal(g)
