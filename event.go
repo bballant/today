@@ -9,5 +9,5 @@ type Event struct {
 	Happiness int
 	Drink     int
 	Eat       int
-	Exercize  int
+	Exercise  int
 }
