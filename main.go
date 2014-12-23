@@ -13,6 +13,8 @@ import (
 func init() {
 	http.HandleFunc("/", home)
 	http.HandleFunc("/new", new)
+	var pulseHandler = &RestHandler{&PulseActions{}}
+	http.HandleFunc("/pulse", pulseHandler.HandleRequest)
 }
 
 func home(w http.ResponseWriter, r *http.Request) {
@@ -33,8 +35,13 @@ func home(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "Today\n")
 }
 
-//curl -v -b dev_appserver_login=test@example.com:False:185804764220139124118 "http://localhost:8080/new?weight=185&happiness=5&drink=4&eat=4&exercise=0"
+/*
+  curl -v -b dev_appserver_login=test@example.com:False:185804764220139124118 \
+"http://localhost:8080/new?weight=185&happiness=5&drink=4&eat=4&exercise=0"
+*/
 func new(w http.ResponseWriter, r *http.Request) {
+	log.Print(r.Method)
+
 	c := appengine.NewContext(r)
 	u := user.Current(c)
 
