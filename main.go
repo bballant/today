@@ -8,12 +8,22 @@ import (
 
 	"appengine"
 	"appengine/user"
+
+	"db"
+	"model"
+	"rest"
 )
 
 func init() {
 	http.HandleFunc("/", home)
 	http.HandleFunc("/new", new)
-	var pulseHandler = &RestHandler{&PulseActions{}}
+
+	var pulseHandler = &rest.RestHandler{
+		&rest.PulseActions{
+			Dao: &db.StubPulseDao{},
+		},
+	}
+
 	http.HandleFunc("/pulse", pulseHandler.HandleRequest)
 }
 
@@ -55,7 +65,7 @@ func new(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, parseErr.Error(), http.StatusInternalServerError)
 	}
 
-	var pulse *Pulse = NewPulse(u.Email, r.Form)
+	var pulse *model.Pulse = model.NewPulse(u.Email, r.Form)
 	log.Print(pulse.Email)
 
 	pulseJs, err := json.Marshal(pulse)
